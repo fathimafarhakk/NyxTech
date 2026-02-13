@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>QueueGuide</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      height: 100vh;
+      background: linear-gradient(135deg, #2b5876, #4e4376);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      text-align: center;
+    }
+
+    .container {
+      max-width: 600px;
+      padding: 20px;
+    }
+
+    h1 {
+      font-size: 48px;
+      margin-bottom: 15px;
+    }
+
+    .tagline {
+      font-size: 20px;
+      margin-bottom: 20px;
+      font-weight: 300;
+    }
+
+    .description {
+      font-size: 16px;
+      line-height: 1.6;
+      margin-bottom: 30px;
+      opacity: 0.9;
+    }
+
+    .btn-group {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 12px 28px;
+      border-radius: 25px;
+      border: none;
+      font-size: 16px;
+      cursor: pointer;
+      transition: 0.3s;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .primary {
+      background: white;
+      color: #4e4376;
+    }
+
+    .secondary {
+      background: transparent;
+      border: 2px solid white;
+      color: white;
+    }
+
+    .btn:hover {
+      transform: scale(1.05);
+    }
+
+    .footer {
+      margin-top: 40px;
+      font-size: 14px;
+      opacity: 0.7;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+    <h1>QueueGuide</h1>
+
+    <div class="tagline">Book. Track. Arrive Smartly.</div>
+
+    <div class="description">
+      QueueGuide allows you to book tokens online,
+      track live queue progress, and reach the venue
+      exactly when your turn approaches.
+    </div>
+
+   <div class="btn-group">
+  <a href="booking.html" class="btn primary">Book Token</a>
+  <a href="tracking.html" class="btn secondary">Track Token</a>
+  <a href="staff.html" class="btn secondary">Staff Login</a>
+</div>
+
+
+    <div class="footer">
+      Smart queue management for hospitals, banks, and public offices.
+    </div>
+  </div>
+
+</body>
+</html>

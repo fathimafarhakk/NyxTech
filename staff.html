@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>QueueGuide - Staff Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: #eef2f7;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .card {
+      background: white;
+      padding: 30px;
+      width: 420px;
+      border-radius: 10px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+
+    h2 {
+      margin-bottom: 20px;
+    }
+
+    .info {
+      margin: 15px 0;
+      font-size: 18px;
+    }
+
+    button {
+      padding: 10px 20px;
+      margin: 8px 0;
+      width: 100%;
+      border: none;
+      border-radius: 6px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .next { background: #4e4376; color: white; }
+    .checkin { background: #28a745; color: white; }
+    .checkout { background: #dc3545; color: white; }
+    .analytics { background: #2196f3; color: white; }
+    .manage { background: #ff9800; color: white; }
+
+    button:hover { opacity: 0.85; }
+
+    .link-btn {
+      text-decoration: none;
+    }
+
+    .back {
+      margin-top: 15px;
+      font-size: 14px;
+      cursor: pointer;
+      color: #4e4376;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="card">
+    <h2>Staff Dashboard</h2>
+
+    <div class="info">
+      <strong>Currently Serving Token:</strong>
+      <span id="currentTokenDisplay">1</span>
+    </div>
+
+    <div class="info">
+      <strong>Average Service Time:</strong>
+      <span id="avgTimeDisplay">5</span> minutes
+    </div>
+
+    <button class="next" onclick="callNext()">Call Next Token</button>
+    <button class="checkin" onclick="checkIn()">Check-In</button>
+    <button class="checkout" onclick="checkOut()">Check-Out</button>
+
+    <!-- Direct Links (NO JS redirect issues) -->
+    <a href="analytics.html" class="link-btn">
+      <button class="analytics">View Analytics</button>
+    </a>
+
+    <a href="manage.html" class="link-btn">
+      <button class="manage">Manage Tokens</button>
+    </a>
+
+    <div class="back" onclick="goBack()">← Back to Home</div>
+  </div>
+
+  <script>
+    let currentServing = localStorage.getItem("currentServing")
+      ? parseInt(localStorage.getItem("currentServing"))
+      : 1;
+
+    let avgServiceTime = localStorage.getItem("avgServiceTime")
+      ? parseFloat(localStorage.getItem("avgServiceTime"))
+      : 5;
+
+    let serviceStartTime = null;
+    let totalServiceTime = 0;
+    let completedCount = 0;
+
+    document.getElementById("currentTokenDisplay").innerText = currentServing;
+    document.getElementById("avgTimeDisplay").innerText = avgServiceTime.toFixed(1);
+
+    function callNext() {
+      currentServing++;
+      localStorage.setItem("currentServing", currentServing);
+      document.getElementById("currentTokenDisplay").innerText = currentServing;
+    }
+
+    function checkIn() {
+      serviceStartTime = new Date();
+      alert("Service started for token " + currentServing);
+    }
+
+    function checkOut() {
+      if (!serviceStartTime) {
+        alert("Please check-in first.");
+        return;
+      }
+
+      let serviceEndTime = new Date();
+      let minutes = (serviceEndTime - serviceStartTime) / 60000;
+
+      totalServiceTime += minutes;
+      completedCount++;
+
+      avgServiceTime = totalServiceTime / completedCount;
+      localStorage.setItem("avgServiceTime", avgServiceTime);
+
+      document.getElementById("avgTimeDisplay").innerText =
+        avgServiceTime.toFixed(1);
+
+      serviceStartTime = null;
+      alert("Service completed. Average updated.");
+    }
+
+    function goBack() {
+      window.location.href = "index.html";
+    }
+  </script>
+
+</body>
+</html>

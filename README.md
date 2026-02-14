@@ -2,27 +2,30 @@
   <img src="./img.png" alt="Project Banner" width="100%">
 </p>
 
-# [Project Name] 🎯
+# [QUEUE GUIDE] 🎯
 
 ## Basic Details
 
-### Team Name: [Name]
+### Team Name: [NyxTech]
 
 ### Team Members
-- Member 1: [Name] - [College]
-- Member 2: [Name] - [College]
+- Member 1: [fathima farha kk] - [EMEA college of arts and science]
+- Member 2: [Ayisha ishra kk] - [EMEA college of arts and science]
 
 ### Hosted Project Link
-[mention your project hosted link here]
+[visit here](https://fathimafarhakk.github.io/NyxTech/)
 
 ### Project Description
-[2-3 lines about what your project does]
+[QueueGuide is a real-time digital queue management system that allows users to book and track service tokens online, reducing physical waiting time.
+
+Staff can manage token flow, update live serving status, and monitor service performance through a Firebase-powered dashboard.
+
+The system supports multiple locations with centralized live updates for accurate queue tracking.]
 
 ### The Problem statement
-[What problem are you solving?]
-
+[Long physical waiting times and lack of real-time visibility in service queues cause frustration, inefficiency, and overcrowding.]
 ### The Solution
-[How are you solving it?]
+[A real-time, location-based digital queue system that allows users to book tokens online and track their turn while staff manage and update the queue through a live dashboard.?]
 
 ---
 
@@ -31,49 +34,27 @@
 ### Technologies/Components Used
 
 **For Software:**
-- Languages used: [e.g., JavaScript, Python, Java]
-- Frameworks used: [e.g., React, Django, Spring Boot]
-- Libraries used: [e.g., axios, pandas, JUnit]
-- Tools used: [e.g., VS Code, Git, Docker]
+- Languages used: [ html,css,js]
+- Frameworks used: [firebase(backend as service)]
+- Libraries used: [Firebase JS SDK (v10 modular version)]
+- Tools used: [ VS Code, Git, ]
 
-**For Hardware:**
-- Main components: [List main components]
-- Specifications: [Technical specifications]
-- Tools required: [List tools needed]
+
 
 ---
 
 ## Features
 
 List the key features of your project:
-- Feature 1: [Description]
-- Feature 2: [Description]
-- Feature 3: [Description]
-- Feature 4: [Description]
+- Feature 1: [Online Token Booking – Users can book tokens remotely by selecting location and entering basic details.]
+- Feature 2: [Real-Time Queue Tracking – Users can check their live queue position and see current serving status instantly.]
+- Feature 3: [Staff Dashboard Control Panel – Staff can call next token, check-in, check-out, and manage queue operations.]
+- Feature 4: [Multi-Location Queue Management – Separate live queue handling for different service locations using Firebase.]
 
 ---
 
-## Implementation
 
-### For Software:
 
-#### Installation
-```bash
-[Installation commands - e.g., npm install, pip install -r requirements.txt]
-```
-
-#### Run
-```bash
-[Run commands - e.g., npm start, python app.py]
-```
-
-### For Hardware:
-
-#### Components Required
-[List all components needed with specifications]
-
-#### Circuit Setup
-[Explain how to set up the circuit]
 
 ---
 
@@ -84,7 +65,9 @@ List the key features of your project:
 #### Screenshots (Add at least 3)
 
 ![Screenshot1](Add screenshot 1 here with proper name)
-*Add caption explaining what this shows*
+*this is the index page
+it contains the 3 core feature of this web
+booking,staff entering the data and  the tracking the tocken*
 
 ![Screenshot2](Add screenshot 2 here with proper name)
 *Add caption explaining what this shows*

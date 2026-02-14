@@ -64,15 +64,15 @@ List the key features of your project:
 
 #### Screenshots (Add at least 3)
 
-!Screenshot1 (images/ss1.png)
+![Screenshot1](images/ss1.png)
 *this is the index page
 it contains the 3 core feature of this web
 booking,staff entering the data and  the tracking the tocken*
 
-!Screenshot2 (images/ss2.png)
+![Screenshot2](images/ss2.png)
 *this shows the current status of the token*
 
-!Screenshot3 (images/ss3.png)
+![Screenshot3](images/ss3.png)
 *here we can see the estimated time to reach the location *
 
 

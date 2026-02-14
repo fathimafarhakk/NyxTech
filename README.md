@@ -64,7 +64,7 @@ List the key features of your project:
 
 #### Screenshots (Add at least 3)
 
-![Screenshot1](Add screenshot 1 here with proper name)
+![Screenshot1](images/ss1.png)
 *this is the index page
 it contains the 3 core feature of this web
 booking,staff entering the data and  the tracking the tocken*

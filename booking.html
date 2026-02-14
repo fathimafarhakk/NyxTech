@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>QueueGuide - Book Token</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+
+body{
+  font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
+  min-height:100vh;
+  background:linear-gradient(135deg,#8b6914 0%,#654321 100%);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:20px;
+}
+
+.container{
+  width:100%;
+  max-width:500px;
+}
+
+.header{
+  text-align:center;
+  margin-bottom:30px;
+}
+
+.logo-text{
+  font-size:32px;
+  font-weight:700;
+  color:white;
+}
+
+.page-title{
+  font-size:24px;
+  color:white;
+  margin-bottom:8px;
+}
+
+.card{
+  background:white;
+  padding:40px 35px;
+  border-radius:25px;
+  box-shadow:0 10px 40px rgba(0,0,0,0.2);
+}
+
+input,select{
+  width:100%;
+  padding:12px;
+  margin-bottom:15px;
+  border-radius:10px;
+  border:2px solid #e2e8f0;
+  font-size:14px;
+}
+
+button{
+  width:100%;
+  padding:14px;
+  background:linear-gradient(135deg,#a0826d,#654321);
+  color:white;
+  border:none;
+  border-radius:12px;
+  font-size:16px;
+  cursor:pointer;
+  transition:0.3s;
+}
+
+button:hover{
+  opacity:0.9;
+}
+
+.result{
+  margin-top:20px;
+  padding:20px;
+  background:#f6f8fb;
+  border-radius:15px;
+  display:none;
+}
+
+/* Back button */
+.back-btn{
+  margin-top:20px;
+  text-align:center;
+  color:white;
+  cursor:pointer;
+  font-size:15px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:8px;
+  transition:0.3s;
+}
+
+.back-btn:hover{
+  gap:12px;
+  opacity:0.9;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <div class="header">
+    <div class="logo-text">QueueGuide</div>
+    <div class="page-title">Book Your Token</div>
+  </div>
+
+  <div class="card">
+    <form id="bookingForm">
+
+      <select id="location" required>
+        <option value="">Select Location</option>
+        <option>City Hospital</option>
+        <option>SBI Bank</option>
+        <option>Passport Office</option>
+      </select>
+
+      <input type="text" id="name" placeholder="Your Name" required>
+      <input type="tel" id="phone" placeholder="Phone Number" required>
+
+      <button type="submit">Generate Token</button>
+    </form>
+
+    <div class="result" id="result"></div>
+  </div>
+
+  <!-- Back Button -->
+  <div class="back-btn" onclick="goBack()">
+    ← Go Back
+  </div>
+
+</div>
+
+<script type="module">
+import { db } from "./firebase.js";
+import {
+  collection,
+  addDoc,
+  query,
+  orderBy,
+  limit,
+  getDocs,
+  serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const form = document.getElementById("bookingForm");
+
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const location = document.getElementById("location").value;
+  const name = document.getElementById("name").value;
+  const phone = document.getElementById("phone").value;
+
+  if (!location || !name || !phone) {
+    alert("All fields required");
+    return;
+  }
+
+  try {
+    // 🔎 Get last token number
+    const q = query(
+      collection(db, "tokens"),
+      orderBy("tokenNumber", "desc"),
+      limit(1)
+    );
+
+    const snapshot = await getDocs(q);
+
+    let nextToken = 1;
+
+    if (!snapshot.empty) {
+      nextToken = snapshot.docs[0].data().tokenNumber + 1;
+    }
+
+    // ➕ Add new token to Firebase
+    await addDoc(collection(db, "tokens"), {
+      tokenNumber: nextToken,
+      name,
+      phone,
+      location,
+      status: "waiting",
+      createdAt: serverTimestamp(),
+      checkInTime: null,
+      checkOutTime: null,
+      serviceDuration: null
+    });
+
+    // ✅ Show result
+    const result = document.getElementById("result");
+    result.style.display = "block";
+    result.innerHTML = `
+      <h3>Token #${nextToken}</h3>
+      <p><strong>Name:</strong> ${name}</p>
+      <p><strong>Location:</strong> ${location}</p>
+      <p>Status: Waiting</p>
+    `;
+
+    form.reset();
+
+  } catch (error) {
+    console.error(error);
+    alert("Error generating token");
+  }
+});
+
+// 🔙 Back to home
+window.goBack = function () {
+  window.location.href = "index.html";
+};
+</script>
+
+</body>
+</html>

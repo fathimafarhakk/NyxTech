@@ -1,0 +1,177 @@
+<!doctype html>
+<html>
+  <head>
+    <title>QueueGuide - Staff Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        min-height: 100vh;
+        background: linear-gradient(135deg, #8b6914 0%, #654321 100%);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 420px;
+      }
+
+      /* Header */
+      .header {
+        text-align: center;
+        color: white;
+        margin-bottom: 30px;
+      }
+
+      .logo {
+        font-size: 30px;
+        font-weight: 700;
+        margin-bottom: 8px;
+      }
+
+      .subtitle {
+        font-size: 14px;
+        opacity: 0.9;
+      }
+
+      /* Card */
+      .card {
+        background: white;
+        padding: 40px 30px;
+        border-radius: 25px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        position: relative;
+      }
+
+      .card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 6px;
+        background: linear-gradient(90deg, #a0826d, #654321);
+      }
+
+      h2 {
+        text-align: center;
+        margin-bottom: 25px;
+        color: #2d3748;
+      }
+
+      input {
+        width: 100%;
+        padding: 12px;
+        margin-bottom: 15px;
+        border-radius: 10px;
+        border: 1px solid #ccc;
+        font-size: 14px;
+      }
+
+      input:focus {
+        outline: none;
+        border-color: #a0826d;
+        box-shadow: 0 0 0 2px rgba(160,130,109,0.2);
+      }
+
+      button {
+        width: 100%;
+        padding: 14px;
+        background: linear-gradient(135deg, #a0826d, #654321);
+        color: white;
+        border: none;
+        border-radius: 12px;
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: 0.3s;
+      }
+
+      button:hover {
+        opacity: 0.9;
+      }
+
+      .error {
+        color: #e53e3e;
+        margin-top: 12px;
+        font-size: 13px;
+        text-align: center;
+      }
+
+      .back-container {
+        text-align: center;
+        margin-top: 20px;
+      }
+
+      .back-button {
+        color: white;
+        text-decoration: none;
+        padding: 10px 25px;
+        border: 2px solid rgba(255,255,255,0.3);
+        border-radius: 12px;
+        transition: 0.3s;
+        font-size: 14px;
+      }
+
+      .back-button:hover {
+        background: rgba(255,255,255,0.2);
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+
+      <div class="header">
+        <div class="logo">QueueGuide</div>
+        <div class="subtitle">Secure Staff Access Portal</div>
+      </div>
+
+      <div class="card">
+        <h2>Staff Login</h2>
+
+        <input type="email" id="email" placeholder="Enter email" />
+        <input type="password" id="password" placeholder="Enter password" />
+
+        <button onclick="login()">Login</button>
+
+        <p id="error" class="error"></p>
+      </div>
+
+      <div class="back-container">
+        <a href="index.html" class="back-button">← Back to Home</a>
+      </div>
+
+    </div>
+
+    <script type="module">
+      import { auth } from "./firebase.js";
+      import { signInWithEmailAndPassword } 
+      from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+      window.login = function () {
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+
+        signInWithEmailAndPassword(auth, email, password)
+          .then(() => {
+            window.location.href = "staff.html";
+          })
+          .catch((error) => {
+            document.getElementById("error").innerText = error.message;
+          });
+      };
+    </script>
+
+  </body>
+</html>

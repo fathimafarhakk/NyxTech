@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>QueueGuide - Staff Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #8b6914 0%, #654321 100%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 550px;
+    }
+
+    /* Header */
+    .header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .logo {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 15px;
+    }
+
+    .logo-icon {
+      width: 50px;
+      height: 50px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+      font-weight: bold;
+      color: white;
+      backdrop-filter: blur(10px);
+    }
+
+    .logo-text {
+      font-size: 32px;
+      font-weight: 700;
+      color: white;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+    }
+
+    .page-title {
+      font-size: 24px;
+      color: white;
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+
+    .page-subtitle {
+      font-size: 15px;
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    /* Card */
+    .card {
+      background: white;
+      padding: 40px 35px;
+      border-radius: 25px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 6px;
+      background: linear-gradient(90deg, #a0826d, #654321);
+    }
+
+    h2 {
+      font-size: 22px;
+      color: #2d3748;
+      margin-bottom: 25px;
+      text-align: center;
+      font-weight: 600;
+    }
+
+    select {
+      width: 100%;
+      padding: 12px 15px;
+      border-radius: 10px;
+      border: 2px solid #e2e8f0;
+      font-size: 15px;
+      color: #2d3748;
+      transition: all 0.3s ease;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      cursor: pointer;
+      background-color: white;
+      margin-bottom: 20px;
+    }
+
+    select:focus {
+      outline: none;
+      border-color: #a0826d;
+      box-shadow: 0 0 0 3px rgba(160, 130, 109, 0.1);
+    }
+
+    h3 {
+      font-size: 16px;
+      color: #2d3748;
+      margin: 15px 0 10px 0;
+      font-weight: 600;
+    }
+
+    h3 span {
+      color: #a0826d;
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-bottom: 10px;
+    }
+
+    button:nth-of-type(1) {
+      background: linear-gradient(135deg, #a0826d 0%, #654321 100%);
+      color: white;
+      box-shadow: 0 4px 15px rgba(160, 130, 109, 0.3);
+    }
+
+    button:nth-of-type(1):hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(160, 130, 109, 0.5);
+    }
+
+    button:nth-of-type(2) {
+      background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+      color: white;
+      box-shadow: 0 4px 15px rgba(72, 187, 120, 0.3);
+    }
+
+    button:nth-of-type(2):hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(72, 187, 120, 0.5);
+    }
+
+    button:nth-of-type(3) {
+      background: linear-gradient(135deg, #f56565 0%, #e53e3e 100%);
+      color: white;
+      box-shadow: 0 4px 15px rgba(245, 101, 101, 0.3);
+    }
+
+    button:nth-of-type(3):hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(245, 101, 101, 0.5);
+    }
+
+    button:nth-of-type(4) {
+      background: linear-gradient(135deg, #718096 0%, #4a5568 100%);
+      color: white;
+      box-shadow: 0 4px 15px rgba(113, 128, 150, 0.3);
+    }
+
+    button:nth-of-type(4):hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(113, 128, 150, 0.5);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    .back {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 15px;
+      cursor: pointer;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.3s ease;
+      opacity: 0.9;
+    }
+
+    .back:hover {
+      opacity: 1;
+      gap: 12px;
+    }
+
+    .back-arrow {
+      font-size: 18px;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 480px) {
+      .card {
+        padding: 30px 25px;
+      }
+
+      .logo-text {
+        font-size: 26px;
+      }
+
+      .page-title {
+        font-size: 20px;
+      }
+
+      h2 {
+        font-size: 20px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+    
+    <!-- Header -->
+    <div class="header">
+      <div class="logo">
+        <div class="logo-icon">Q</div>
+        <div class="logo-text">QueueGuide</div>
+      </div>
+      <div class="page-title">Staff Dashboard</div>
+      <a href="manage.html">Manage Tokens</a>
+      <div class="page-subtitle">Manage queue operations efficiently</div>
+    </div>
+
+    <!-- Dashboard Card -->
+    <div class="card">
+      <h2>Staff Dashboard</h2>
+
+      <select id="locationSelect">
+        <option value="">Select Location</option>
+        <option>City Hospital</option>
+        <option>SBI Bank</option>
+        <option>Passport Office</option>
+      </select>
+
+      <br><br>
+
+      <h3>Currently Serving: <span id="currentTokenDisplay">-</span></h3>
+      <h3>Avg Service Time: <span id="avgTimeDisplay">-</span> min</h3>
+
+      <br>
+
+      <button onclick="callNext()">Call Next Token</button>
+      <button onclick="checkIn()">Check-In</button>
+      <button onclick="checkOut()">Check-Out</button>
+      <button onclick="logout()">Logout</button>
+    </div>
+
+    <div class="back" onclick="goHome()">
+      <span class="back-arrow">←</span>
+      <span>Back to Home</span>
+    </div>
+
+  </div>
+
+  <script type="module">
+    import { db, auth } from "./firebase.js";
+    import {
+      doc,
+      getDoc,
+      updateDoc,
+      onSnapshot,
+      collection,
+      query,
+      where,
+      getDocs
+    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    import {
+      onAuthStateChanged,
+      signOut
+    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+    let selectedLocation = null;
+    let currentTokenDoc = null;
+    let serviceStartTime = null;
+
+    const tokenDisplay = document.getElementById("currentTokenDisplay");
+    const avgDisplay = document.getElementById("avgTimeDisplay");
+    const locationSelect = document.getElementById("locationSelect");
+
+    onAuthStateChanged(auth, (user) => {
+      if (!user) window.location.href = "login.html";
+    });
+
+    locationSelect.addEventListener("change", () => {
+      selectedLocation = locationSelect.value;
+      if (!selectedLocation) return;
+
+      const liveRef = doc(db, "liveStatus", selectedLocation);
+
+      onSnapshot(liveRef, (snap) => {
+        if (snap.exists()) {
+          const data = snap.data();
+          tokenDisplay.innerText = data.currentServing;
+          avgDisplay.innerText = data.avgServiceTime.toFixed(1);
+        }
+      });
+    });
+
+    window.callNext = async function () {
+      if (!selectedLocation) return alert("Select location first");
+
+      const liveRef = doc(db, "liveStatus", selectedLocation);
+      const liveSnap = await getDoc(liveRef);
+      let currentServing = liveSnap.data().currentServing + 1;
+
+      await updateDoc(liveRef, {
+        currentServing
+      });
+
+      // Update token status to "serving"
+      const q = query(
+        collection(db, "tokens"),
+        where("location", "==", selectedLocation),
+        where("tokenNumber", "==", currentServing)
+      );
+
+      const snap = await getDocs(q);
+      if (!snap.empty) {
+        currentTokenDoc = snap.docs[0].ref;
+        await updateDoc(currentTokenDoc, {
+          status: "serving"
+        });
+      }
+    };
+
+    window.checkIn = async function () {
+      if (!currentTokenDoc) return alert("Call next token first");
+
+      serviceStartTime = new Date();
+
+      await updateDoc(currentTokenDoc, {
+        checkInTime: new Date()
+      });
+
+      alert("Service Started");
+    };
+
+    window.checkOut = async function () {
+      if (!serviceStartTime || !currentTokenDoc)
+        return alert("Check-In first");
+
+      const end = new Date();
+      const minutes = (end - serviceStartTime) / 60000;
+
+      await updateDoc(currentTokenDoc, {
+        status: "completed",
+        checkOutTime: end,
+        serviceDuration: minutes
+      });
+
+      const liveRef = doc(db, "liveStatus", selectedLocation);
+      const liveSnap = await getDoc(liveRef);
+      const data = liveSnap.data();
+
+      const newAvg =
+        ((data.avgServiceTime * data.completedCount) + minutes)
+        / (data.completedCount + 1);
+
+      await updateDoc(liveRef, {
+        avgServiceTime: newAvg,
+        completedCount: data.completedCount + 1
+      });
+
+      serviceStartTime = null;
+      alert("Service Completed");
+    };
+
+    window.logout = function () {
+      signOut(auth).then(() => {
+        window.location.href = "login.html";
+      });
+    };
+
+    window.goHome = function () {
+      window.location.href = "index.html";
+    };
+  </script>
+
+</body>
+</html>

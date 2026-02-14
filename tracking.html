@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>QueueGuide - Track Token</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #8b6914 0%, #654321 100%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 500px;
+    }
+
+    /* Header */
+    .header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .logo {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 15px;
+    }
+
+    .logo-icon {
+      width: 50px;
+      height: 50px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+      font-weight: bold;
+      color: white;
+      backdrop-filter: blur(10px);
+    }
+
+    .logo-text {
+      font-size: 32px;
+      font-weight: 700;
+      color: white;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+    }
+
+    .page-title {
+      font-size: 24px;
+      color: white;
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+
+    .page-subtitle {
+      font-size: 15px;
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    /* Card */
+    .card {
+      background: white;
+      padding: 40px 35px;
+      border-radius: 25px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 6px;
+      background: linear-gradient(90deg, #a0826d, #654321);
+    }
+
+    .form-title {
+      font-size: 22px;
+      color: #2d3748;
+      margin-bottom: 25px;
+      text-align: center;
+      font-weight: 600;
+    }
+
+    /* Info Box */
+    .info-box {
+      background: rgba(160, 130, 109, 0.1);
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 25px;
+      border-left: 4px solid #a0826d;
+    }
+
+    .info-box p {
+      font-size: 14px;
+      color: #4a5568;
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    .info-box .icon {
+      display: inline-block;
+      margin-right: 8px;
+    }
+
+    /* Form Elements */
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 15px;
+      color: #2d3748;
+      font-weight: 500;
+      text-align: left;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 12px 15px;
+      border-radius: 10px;
+      border: 2px solid #e2e8f0;
+      font-size: 15px;
+      color: #2d3748;
+      transition: all 0.3s ease;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    input:focus, select:focus {
+      outline: none;
+      border-color: #a0826d;
+      box-shadow: 0 0 0 3px rgba(160, 130, 109, 0.1);
+    }
+
+    input::placeholder {
+      color: #a0aec0;
+    }
+
+    select {
+      cursor: pointer;
+      background-color: white;
+    }
+
+    /* Button */
+    button {
+      margin-top: 10px;
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, #a0826d 0%, #654321 100%);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 17px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(160, 130, 109, 0.3);
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(160, 130, 109, 0.5);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* Loading Spinner */
+    .loading {
+      display: none;
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .spinner {
+      border: 3px solid #f3f3f3;
+      border-top: 3px solid #a0826d;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Result Section */
+    .result {
+      margin-top: 25px;
+      padding: 25px;
+      background: linear-gradient(135deg, #f6f8fb 0%, #e9ecf1 100%);
+      border-radius: 15px;
+      display: none;
+      border-left: 5px solid #a0826d;
+    }
+
+    .status-icon {
+      text-align: center;
+      font-size: 50px;
+      margin-bottom: 15px;
+    }
+
+    .result h3 {
+      font-size: 28px;
+      color: #a0826d;
+      margin-bottom: 15px;
+      text-align: center;
+      font-weight: 700;
+    }
+
+    .result-info {
+      background: white;
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 10px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+
+    .result-info p {
+      margin: 8px 0;
+      color: #4a5568;
+      font-size: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .result-info strong {
+      color: #2d3748;
+      font-weight: 600;
+    }
+
+    .result-info .value {
+      color: #a0826d;
+      font-weight: 600;
+      font-size: 16px;
+    }
+
+    /* Status Badge */
+    .status-badge {
+      display: inline-block;
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: 600;
+      margin-top: 10px;
+    }
+
+    .status-active {
+      background: #d4edda;
+      color: #155724;
+    }
+
+    .status-completed {
+      background: #f8d7da;
+      color: #721c24;
+    }
+
+    .status-upcoming {
+      background: #fff3cd;
+      color: #856404;
+    }
+
+    /* Progress Bar */
+    .progress-container {
+      margin-top: 15px;
+      background: #e2e8f0;
+      border-radius: 10px;
+      overflow: hidden;
+      height: 8px;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, #a0826d, #654321);
+      transition: width 0.5s ease;
+    }
+
+    .progress-text {
+      text-align: center;
+      margin-top: 8px;
+      font-size: 13px;
+      color: #718096;
+    }
+
+    /* Back Link */
+    .back {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 15px;
+      cursor: pointer;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.3s ease;
+      opacity: 0.9;
+    }
+
+    .back:hover {
+      opacity: 1;
+      gap: 12px;
+    }
+
+    .back-arrow {
+      font-size: 18px;
+    }
+
+    /* Quick Actions */
+    .quick-actions {
+      margin-top: 15px;
+      display: flex;
+      gap: 10px;
+    }
+
+    .quick-btn {
+      flex: 1;
+      padding: 10px;
+      background: rgba(160, 130, 109, 0.1);
+      border: 2px solid #a0826d;
+      border-radius: 8px;
+      color: #654321;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-align: center;
+    }
+
+    .quick-btn:hover {
+      background: rgba(160, 130, 109, 0.2);
+      transform: translateY(-2px);
+    }
+
+    /* Location Badge */
+    .location-badge {
+      background: rgba(160, 130, 109, 0.1);
+      padding: 8px 16px;
+      border-radius: 8px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 15px;
+    }
+
+    .location-badge .icon {
+      font-size: 16px;
+    }
+
+    .location-badge .name {
+      color: #2d3748;
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 480px) {
+      .card {
+        padding: 30px 25px;
+      }
+
+      .logo-text {
+        font-size: 26px;
+      }
+
+      .page-title {
+        font-size: 20px;
+      }
+
+      .form-title {
+        font-size: 20px;
+      }
+
+      .quick-actions {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+    
+    <!-- Header -->
+    <div class="header">
+      <div class="logo">
+        <div class="logo-icon">Q</div>
+        <div class="logo-text">QueueGuide</div>
+      </div>
+      <div class="page-title">Track Your Token</div>
+      <div class="page-subtitle">Monitor your queue status in real-time</div>
+    </div>
+
+    <!-- Tracking Card -->
+    <div class="card">
+      <div class="form-title">🔍 Token Tracking</div>
+
+      <div class="info-box">
+        <p><span class="icon">💡</span> Enter your token number to check your current position in the queue</p>
+      </div>
+
+      <form onsubmit="event.preventDefault(); trackToken();">
+        <div class="form-group">
+          <label>Select Location</label>
+          <select id="locationSelect" required>
+            <option value="">-- Select Location --</option>
+            <option value="SBI Bank">SBI Bank</option>
+            <option value="City Hospital">City Hospital</option>
+            <option value="Passport Office">Passport Office</option>
+            <option value="Municipal Office">Municipal Office</option>
+            <option value="Government Hospital">Government Hospital</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Token Number</label>
+          <input type="number" id="tokenInput" placeholder="Enter your token number" required min="1">
+        </div>
+
+        <button type="submit" id="trackBtn">Track Status</button>
+      </form>
+
+      <!-- Loading Indicator -->
+      <div class="loading" id="loading">
+        <div class="spinner"></div>
+        <p style="margin-top: 10px; color: #718096;">Fetching token status...</p>
+      </div>
+
+      <!-- Result Display -->
+      <div class="result" id="result"></div>
+    </div>
+
+    <div class="back" onclick="goBack()">
+      <span class="back-arrow">←</span>
+      <span>Back to Home</span>
+    </div>
+
+  </div>
+
+  <script type="module">
+    import { db } from "./firebase.js";
+    import {
+      doc,
+      getDoc,
+      collection,
+      query,
+      where,
+      getDocs
+    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    // TRACK FUNCTION
+    window.trackToken = async function () {
+      const userToken = parseInt(document.getElementById("tokenInput").value);
+      const location = document.getElementById("locationSelect").value;
+      const trackBtn = document.getElementById("trackBtn");
+      const loadingDiv = document.getElementById("loading");
+      const resultDiv = document.getElementById("result");
+
+      if (!userToken || userToken < 1) {
+        alert("⚠️ Please enter a valid token number");
+        return;
+      }
+
+      if (!location) {
+        alert("⚠️ Please select a location");
+        return;
+      }
+
+      // Show loading, disable button
+      trackBtn.disabled = true;
+      trackBtn.textContent = "Tracking...";
+      loadingDiv.style.display = "block";
+      resultDiv.style.display = "none";
+
+      try {
+        // 1️⃣ Get token by tokenNumber + location
+        const q = query(
+          collection(db, "tokens"),
+          where("tokenNumber", "==", userToken),
+          where("location", "==", location)
+        );
+
+        const querySnapshot = await getDocs(q);
+
+        if (querySnapshot.empty) {
+          loadingDiv.style.display = "none";
+          alert("❌ Token not found for this location. Please check your token number and location.");
+          trackBtn.disabled = false;
+          trackBtn.textContent = "Track Status";
+          return;
+        }
+
+        const tokenData = querySnapshot.docs[0].data();
+
+        // 2️⃣ Get liveStatus of that location
+        const liveRef = doc(db, "liveStatus", location);
+        const liveSnap = await getDoc(liveRef);
+
+        if (!liveSnap.exists()) {
+          loadingDiv.style.display = "none";
+          alert("⚠️ Live status not configured for this location");
+          trackBtn.disabled = false;
+          trackBtn.textContent = "Track Status";
+          return;
+        }
+
+        const liveData = liveSnap.data();
+        const currentServing = liveData.currentServing;
+
+        const tokensAhead = userToken - currentServing;
+
+        let html = "";
+
+        // Location badge
+        const locationBadge = `
+          <div class="location-badge">
+            <span class="icon">📍</span>
+            <span class="name">${location}</span>
+          </div>
+        `;
+
+        // Completed
+        if (tokenData.status === "completed" || tokensAhead < 0) {
+          html = locationBadge + `
+            <div class="status-icon">⏹️</div>
+            <h3>Token #${userToken}</h3>
+            <div class="result-info">
+              <p><strong>Status:</strong> <span class="value">Completed</span></p>
+              <p><strong>Currently Serving:</strong> <span class="value">Token #${currentServing}</span></p>
+            </div>
+            <div style="text-align: center;">
+              <span class="status-badge status-completed">Service Completed</span>
+            </div>
+            <div style="text-align: center; margin-top: 15px; color: #718096; font-size: 14px;">
+              <p>Your turn has already passed. Please visit the counter or book a new token.</p>
+            </div>
+          `;
+        }
+
+        // Your turn
+        else if (tokensAhead === 0) {
+          html = locationBadge + `
+            <div class="status-icon">🔔</div>
+            <h3>Token #${userToken}</h3>
+            <div class="result-info">
+              <p><strong>Status:</strong> <span class="value">Your Turn!</span></p>
+              <p><strong>Currently Serving:</strong> <span class="value">Token #${currentServing}</span></p>
+            </div>
+            <div style="text-align: center;">
+              <span class="status-badge status-active">PLEASE PROCEED TO COUNTER</span>
+            </div>
+            <div style="text-align: center; margin-top: 15px; color: #718096; font-size: 14px;">
+              <p>🎯 It's your turn now! Please proceed to the service counter immediately.</p>
+            </div>
+          `;
+        }
+
+        // Waiting
+        else {
+          const avgServiceTime = 5;
+          const estimatedWait = tokensAhead * avgServiceTime;
+          
+          // Format time display
+          let timeDisplay = estimatedWait + " minutes";
+          if (estimatedWait >= 60) {
+            const hours = Math.floor(estimatedWait / 60);
+            const mins = estimatedWait % 60;
+            timeDisplay = hours + " hour" + (hours > 1 ? "s" : "") + (mins > 0 ? " " + mins + " min" : "");
+          }
+
+          html = locationBadge + `
+            <div class="status-icon">⏳</div>
+            <h3>Token #${userToken}</h3>
+            <div class="result-info">
+              <p><strong>Currently Serving:</strong> <span class="value">Token #${currentServing}</span></p>
+              <p><strong>Tokens Ahead:</strong> <span class="value">${tokensAhead}</span></p>
+              <p><strong>Estimated Wait:</strong> <span class="value">${timeDisplay}</span></p>
+            </div>
+            <div style="text-align: center;">
+              <span class="status-badge status-upcoming">In Queue</span>
+            </div>
+            <div class="quick-actions">
+              <div class="quick-btn" onclick="trackToken()">🔄 Refresh Status</div>
+            </div>
+            <div style="text-align: center; margin-top: 15px; color: #718096; font-size: 14px;">
+              <p>💬 We'll notify you when your turn approaches</p>
+            </div>
+          `;
+        }
+
+        // Hide loading, show result
+        loadingDiv.style.display = "none";
+        resultDiv.style.display = "block";
+        resultDiv.innerHTML = html;
+
+        // Scroll to result
+        resultDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+      } catch (error) {
+        console.error("Error fetching token data:", error);
+        loadingDiv.style.display = "none";
+        alert("❌ Error fetching data. Please try again or check your internet connection.");
+      } finally {
+        trackBtn.disabled = false;
+        trackBtn.textContent = "Track Status";
+      }
+    };
+
+    window.goBack = function () {
+      window.location.href = "index.html";
+    };
+  </script>
+
+</body>
+</html>

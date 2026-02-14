@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>QueueGuide - Manage Tokens</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #8b6914 0%, #654321 100%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 600px;
+    }
+
+    /* Header */
+    .header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .logo {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 15px;
+    }
+
+    .logo-icon {
+      width: 50px;
+      height: 50px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+      font-weight: bold;
+      color: white;
+      backdrop-filter: blur(10px);
+    }
+
+    .logo-text {
+      font-size: 32px;
+      font-weight: 700;
+      color: white;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+    }
+
+    .page-title {
+      font-size: 24px;
+      color: white;
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+
+    .page-subtitle {
+      font-size: 15px;
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    /* Card */
+    .card {
+      background: white;
+      padding: 40px 35px;
+      border-radius: 25px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 6px;
+      background: linear-gradient(90deg, #a0826d, #654321);
+    }
+
+    h2 {
+      font-size: 22px;
+      color: #2d3748;
+      margin-bottom: 25px;
+      text-align: center;
+      font-weight: 600;
+    }
+
+    select {
+      width: 100%;
+      padding: 12px 15px;
+      border-radius: 10px;
+      border: 2px solid #e2e8f0;
+      font-size: 15px;
+      color: #2d3748;
+      transition: all 0.3s ease;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      cursor: pointer;
+      background-color: white;
+      margin-bottom: 20px;
+    }
+
+    select:focus {
+      outline: none;
+      border-color: #a0826d;
+      box-shadow: 0 0 0 3px rgba(160, 130, 109, 0.1);
+    }
+
+    h3 {
+      font-size: 16px;
+      color: #2d3748;
+      margin: 15px 0 10px 0;
+      font-weight: 600;
+    }
+
+    h3 span {
+      color: #a0826d;
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px 15px;
+      border-radius: 10px;
+      border: 2px solid #e2e8f0;
+      font-size: 15px;
+      color: #2d3748;
+      transition: all 0.3s ease;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin-bottom: 10px;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #a0826d;
+      box-shadow: 0 0 0 3px rgba(160, 130, 109, 0.1);
+    }
+
+    input::placeholder {
+      color: #a0aec0;
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-bottom: 10px;
+    }
+
+    /* Update Current Token button */
+    button:nth-of-type(1) {
+      background: linear-gradient(135deg, #a0826d 0%, #654321 100%);
+      color: white;
+      box-shadow: 0 4px 15px rgba(160, 130, 109, 0.3);
+    }
+
+    button:nth-of-type(1):hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(160, 130, 109, 0.5);
+    }
+
+    /* Update Serving Token button */
+    button:nth-of-type(2) {
+      background: linear-gradient(135deg, #a0826d 0%, #654321 100%);
+      color: white;
+      box-shadow: 0 4px 15px rgba(160, 130, 109, 0.3);
+    }
+
+    button:nth-of-type(2):hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(160, 130, 109, 0.5);
+    }
+
+    /* Sync Tokens button */
+    button:nth-of-type(3) {
+      background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+      color: white;
+      box-shadow: 0 4px 15px rgba(72, 187, 120, 0.3);
+    }
+
+    button:nth-of-type(3):hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(72, 187, 120, 0.5);
+    }
+
+    /* Reset Queue button */
+    button:nth-of-type(4) {
+      background: linear-gradient(135deg, #ed8936 0%, #dd6b20 100%);
+      color: white;
+      box-shadow: 0 4px 15px rgba(237, 137, 54, 0.3);
+    }
+
+    button:nth-of-type(4):hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(237, 137, 54, 0.5);
+    }
+
+    /* Clear All Data button */
+    button:nth-of-type(5) {
+      background: linear-gradient(135deg, #f56565 0%, #e53e3e 100%);
+      color: white;
+      box-shadow: 0 4px 15px rgba(245, 101, 101, 0.3);
+    }
+
+    button:nth-of-type(5):hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(245, 101, 101, 0.5);
+    }
+
+    /* Back button */
+    button:nth-of-type(6) {
+      background: linear-gradient(135deg, #718096 0%, #4a5568 100%);
+      color: white;
+      box-shadow: 0 4px 15px rgba(113, 128, 150, 0.3);
+    }
+
+    button:nth-of-type(6):hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(113, 128, 150, 0.5);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    br {
+      display: block;
+      content: "";
+      margin-top: 10px;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 480px) {
+      .card {
+        padding: 30px 25px;
+      }
+
+      .logo-text {
+        font-size: 26px;
+      }
+
+      .page-title {
+        font-size: 20px;
+      }
+
+      h2 {
+        font-size: 20px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+    
+    <!-- Header -->
+    <div class="header">
+      <div class="logo">
+        <div class="logo-icon">Q</div>
+        <div class="logo-text">QueueGuide</div>
+      </div>
+      <div class="page-title">Manage Tokens</div>
+      <a href="staff.html">Staff page</a>
+      <div class="page-subtitle">Configure and control queue settings</div>
+    </div>
+
+    <!-- Management Card -->
+    <div class="card">
+      <h2>Manage Tokens</h2>
+
+      <select id="locationSelect">
+        <option value="">Select Location</option>
+        <option>City Hospital</option>
+        <option>SBI Bank</option>
+        <option>Passport Office</option>
+      </select>
+
+      <h3>Current Token: <span id="displayCurrentToken">-</span></h3>
+      <h3>Currently Serving: <span id="displayCurrentServing">-</span></h3>
+      <h3>Tokens Waiting: <span id="displayTokensInQueue">-</span></h3>
+
+      <br>
+
+      <input type="number" id="newToken" placeholder="Set Current Token">
+      <button onclick="setCurrentToken()">Update Current Token</button>
+
+      <br><br>
+
+      <input type="number" id="servingToken" placeholder="Set Serving Token">
+      <button onclick="setServingToken()">Update Serving Token</button>
+
+      <br><br>
+
+      <button onclick="syncTokens()">Sync Tokens</button>
+      <button onclick="resetQueue()">Reset Queue</button>
+      <button onclick="clearAllData()">Clear All Data</button>
+
+      <br><br>
+
+      <button onclick="goBack()">Back</button>
+    </div>
+
+  </div>
+
+  <script type="module">
+    import { db } from "./firebase.js";
+    import {
+      doc,
+      getDoc,
+      updateDoc,
+      onSnapshot,
+      collection,
+      query,
+      where,
+      getDocs,
+      deleteDoc
+    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    let selectedLocation = null;
+    let liveRef = null;
+
+    const currentTokenDisplay = document.getElementById("displayCurrentToken");
+    const currentServingDisplay = document.getElementById("displayCurrentServing");
+    const tokensInQueueDisplay = document.getElementById("displayTokensInQueue");
+
+    document.getElementById("locationSelect").addEventListener("change", async (e) => {
+      selectedLocation = e.target.value;
+      if (!selectedLocation) return;
+
+      liveRef = doc(db, "liveStatus", selectedLocation);
+
+      onSnapshot(liveRef, async (snap) => {
+        if (!snap.exists()) return;
+
+        const data = snap.data();
+
+        currentTokenDisplay.innerText = data.currentToken;
+        currentServingDisplay.innerText = data.currentServing;
+
+        const q = query(
+          collection(db, "tokens"),
+          where("location", "==", selectedLocation),
+          where("status", "==", "waiting")
+        );
+
+        const waitingSnap = await getDocs(q);
+        tokensInQueueDisplay.innerText = waitingSnap.size;
+      });
+    });
+
+    window.setCurrentToken = async function () {
+      if (!selectedLocation) return alert("Select location first");
+
+      const newToken = parseInt(document.getElementById("newToken").value);
+      if (!newToken) return alert("Enter valid number");
+
+      await updateDoc(liveRef, {
+        currentToken: newToken
+      });
+
+      alert("Current Token Updated");
+    };
+
+    window.setServingToken = async function () {
+      if (!selectedLocation) return alert("Select location first");
+
+      const serving = parseInt(document.getElementById("servingToken").value);
+      if (!serving) return alert("Enter valid number");
+
+      await updateDoc(liveRef, {
+        currentServing: serving
+      });
+
+      alert("Serving Token Updated");
+    };
+
+    window.syncTokens = async function () {
+      if (!selectedLocation) return alert("Select location first");
+
+      const snap = await getDoc(liveRef);
+      const data = snap.data();
+
+      await updateDoc(liveRef, {
+        currentToken: data.currentServing
+      });
+
+      alert("Synced Successfully");
+    };
+
+    window.resetQueue = async function () {
+      if (!selectedLocation) return alert("Select location first");
+
+      const confirmReset = confirm("Reset queue for this location?");
+      if (!confirmReset) return;
+
+      await updateDoc(liveRef, {
+        currentServing: 0,
+        currentToken: 0
+      });
+
+      alert("Queue Reset");
+    };
+
+    window.clearAllData = async function () {
+      if (!selectedLocation) return alert("Select location first");
+
+      const confirmClear = confirm("Delete ALL tokens for this location?");
+      if (!confirmClear) return;
+
+      const q = query(
+        collection(db, "tokens"),
+        where("location", "==", selectedLocation)
+      );
+
+      const snap = await getDocs(q);
+
+      for (let docSnap of snap.docs) {
+        await deleteDoc(docSnap.ref);
+      }
+
+      await updateDoc(liveRef, {
+        currentServing: 0,
+        currentToken: 0,
+        completedCount: 0,
+        avgServiceTime: 5
+      });
+
+      alert("All Data Cleared");
+    };
+
+    window.goBack = function () {
+      window.location.href = "staff.html";
+    };
+  </script>
+
+</body>
+</html>

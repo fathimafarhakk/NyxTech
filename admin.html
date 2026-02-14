@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>QueueGuide - Create Staff</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #8b6914 0%, #654321 100%);
+      padding: 40px 20px;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    /* Header */
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+      color: white;
+    }
+
+    .logo {
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .subtitle {
+      font-size: 16px;
+      opacity: 0.9;
+    }
+
+    /* Card */
+    .main-card {
+      background: white;
+      padding: 40px;
+      border-radius: 25px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+      margin-bottom: 30px;
+      position: relative;
+    }
+
+    .main-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 6px;
+      background: linear-gradient(90deg, #a0826d, #654321);
+    }
+
+    h2 {
+      margin-bottom: 25px;
+      color: #2d3748;
+    }
+
+    /* Form */
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      font-size: 14px;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #a0826d;
+      box-shadow: 0 0 0 2px rgba(160,130,109,0.2);
+    }
+
+    .btn {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, #a0826d, #654321);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .btn:hover {
+      opacity: 0.9;
+    }
+
+    /* Staff List */
+    .staff-list {
+      margin-top: 30px;
+    }
+
+    .staff-item {
+      background: #f6f8fb;
+      padding: 15px;
+      border-radius: 12px;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-left: 4px solid #a0826d;
+    }
+
+    .staff-name {
+      font-weight: 600;
+      color: #2d3748;
+    }
+
+    .staff-email {
+      font-size: 13px;
+      color: #718096;
+    }
+
+    .back-container {
+      text-align: center;
+    }
+
+    .back-button {
+      color: white;
+      text-decoration: none;
+      padding: 12px 30px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-radius: 12px;
+      transition: 0.3s;
+    }
+
+    .back-button:hover {
+      background: rgba(255,255,255,0.2);
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <div class="header">
+      <div class="logo">QueueGuide</div>
+      <div class="subtitle">Create and Manage Staff Accounts</div>
+    </div>
+
+    <div class="main-card">
+
+      <h2>Create Staff</h2>
+
+      <div class="form-group">
+        <input type="text" id="name" placeholder="Staff Name">
+      </div>
+
+      <div class="form-group">
+        <input type="email" id="email" placeholder="Email">
+      </div>
+
+      <div class="form-group">
+        <input type="password" id="password" placeholder="Password">
+      </div>
+
+      <button class="btn" onclick="createStaff()">Create Staff</button>
+
+      <div class="staff-list">
+        <h2>Staff List</h2>
+        <div id="staffList"></div>
+      </div>
+
+    </div>
+
+    <div class="back-container">
+      <a href="staff.html" class="back-button">← Back to Staff Dashboard</a>
+    </div>
+
+  </div>
+
+  <script type="module">
+    import { auth, db } from "./firebase.js";
+    import { createUserWithEmailAndPassword, signOut } 
+      from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import { collection, addDoc, getDocs } 
+      from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+    import {
+      onAuthStateChanged,
+      signOut
+    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+     onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        window.location.href = "login.html";
+      }
+     });
+     
+    window.createStaff = async function() {
+      const name = document.getElementById("name").value;
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+
+      if (!name || !email || !password) {
+        alert("Please fill in all fields");
+        return;
+      }
+
+      console.log("Creating staff with:", { name, email });
+
+      try {
+        // Create the new staff user
+        console.log("Step 1: Creating user account...");
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+        console.log("User created:", user.uid);
+        alert(`✅ Success!\n\nStaff member created successfully:\n\nName: ${name}\nEmail: ${email}`);
+
+        // Add staff info to Firestore
+        console.log("Step 2: Adding to Firestore...");
+        await addDoc(collection(db, "staffs"), {
+          uid: user.uid,
+          name: name,
+          email: email,
+          role: "staff",
+          createdAt: new Date()
+        });
+        console.log("Added to Firestore successfully");
+
+        // Sign out the newly created user to avoid session conflicts
+        console.log("Step 3: Signing out new user...");
+        try {
+          await signOut(auth);
+          console.log("Signed out successfully");
+        } catch (signOutError) {
+          console.warn("Sign out warning:", signOutError);
+        }
+
+        // Clear the form
+        document.getElementById("name").value = "";
+        document.getElementById("email").value = "";
+        document.getElementById("password").value = "";
+        
+        console.log("Step 4: Reloading staff list...");
+        await loadStaff();
+        console.log("Staff list reloaded");
+
+        alert(`✅ Success!\n\nStaff member created successfully:\n\nName: ${name}\nEmail: ${email}`);
+
+      } catch (error) {
+        console.error("Error creating staff:", error);
+        console.error("Error code:", error.code);
+        console.error("Error message:", error.message);
+        alert("❌ Error: " + error.message);
+      }
+    };
+
+    async function loadStaff() {
+      const querySnapshot = await getDocs(collection(db, "staffs"));
+      const list = document.getElementById("staffList");
+      list.innerHTML = "";
+
+      querySnapshot.forEach((doc) => {
+        const data = doc.data();
+        const div = document.createElement("div");
+        div.className = "staff-item";
+        div.innerHTML = `
+          <div>
+            <div class="staff-name">${data.name}</div>
+            <div class="staff-email">${data.email}</div>
+          </div>
+        `;
+        list.appendChild(div);
+      });
+    }
+
+    loadStaff();
+  </script>
+
+</body>
+</html>
